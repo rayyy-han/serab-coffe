@@ -21,7 +21,10 @@ function formatRupiah(num: number) {
 // ── Fetch summary di server ───────────────────────────────────────
 async function getDashboardSummary(): Promise<DashboardSummary> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : "http://localhost:3000/";
     const res     = await fetch(`${baseUrl}/api/dashboard/summary`, {
       cache: "no-store",
     });
