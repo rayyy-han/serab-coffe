@@ -17,7 +17,7 @@ function formatRupiah(num: number) {
 async function getSummary(): Promise<Summary> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL ? process.env.NEXTAUTH_URL ?? "http://localhost:3000" : "http://localhost:3000"}/api/history/summary`,
+      `https://serab-coffe-phr1.vercel.app/api/history/summary`,
       { cache: "no-store" } // selalu fresh
     );
     const json = await res.json();
