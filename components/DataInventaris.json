@@ -1,0 +1,107 @@
+[
+  {
+    "id": 101,
+    "nomor": 1,
+    "namaMenu": "Nasi Goreng Serab Special",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 25
+  },
+  {
+    "id": 102,
+    "nomor": 2,
+    "namaMenu": "Fettuccine Carbonara",
+    "statusKetersediaan": "TERBATAS",
+    "sisaPorsi": 5
+  },
+  {
+    "id": 103,
+    "nomor": 3,
+    "namaMenu": "Ayam Bakar Madu",
+    "statusKetersediaan": "HABIS",
+    "sisaPorsi": 0
+  },
+  {
+    "id": 104,
+    "nomor": 4,
+    "namaMenu": "Beef Burger & Fries",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 18
+  },
+  {
+    "id": 105,
+    "nomor": 5,
+    "namaMenu": "Croissant Almond",
+    "statusKetersediaan": "TERBATAS",
+    "sisaPorsi": 3
+  },
+  {
+    "id": 106,
+    "nomor": 6,
+    "namaMenu": "Fudgy Brownies Slice",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 12
+  },
+  {
+    "id": 107,
+    "nomor": 7,
+    "namaMenu": "Cheesecake Regal",
+    "statusKetersediaan": "TERBATAS",
+    "sisaPorsi": 4
+  },
+  {
+    "id": 108,
+    "nomor": 8,
+    "namaMenu": "Churros dengan Saus Cokelat",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 15
+  },
+  {
+    "id": 109,
+    "nomor": 9,
+    "namaMenu": "Es Kopi Susu Gula Aren",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 60
+  },
+  {
+    "id": 110,
+    "nomor": 10,
+    "namaMenu": "Matcha Latte",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 40
+  },
+  {
+    "id": 111,
+    "nomor": 11,
+    "namaMenu": "Cafe Latte (Hot)",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 35
+  },
+  {
+    "id": 112,
+    "nomor": 12,
+    "namaMenu": "Manual Brew V60",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 20
+  },
+  {
+    "id": 113,
+    "nomor": 13,
+    "namaMenu": "Avocado Coffee Float",
+    "statusKetersediaan": "HABIS",
+    "sisaPorsi": 0
+  },
+  {
+    "id": 114,
+    "nomor": 14,
+    "namaMenu": "Lemon Earl Grey Tea",
+    "statusKetersediaan": "TERSEDIA",
+    "sisaPorsi": 30
+  },
+  {
+    "id": 115,
+    "nomor": 15,
+    "namaMenu": "Red Velvet Latte",
+    "statusKetersediaan": "TERBATAS",
+    "sisaPorsi": 7
+  }
+]
