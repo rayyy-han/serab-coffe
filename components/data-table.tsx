@@ -222,7 +222,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
       }
       return (
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+          <div className="w-9 h-9 rounded-[8px] overflow-hidden bg-muted flex-shrink-0">
             {menu.image_url ? (
               <img
                 src={menu.image_url}
@@ -432,7 +432,7 @@ export function DataTable({
         value="outline"
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
       >
-        <div className="overflow-hidden rounded-lg border">
+        <div className="overflow-hidden rounded-[8px] border">
           <DndContext
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}

@@ -71,8 +71,8 @@ export const schema = z.object({
   id: z.number(),
   nomor: z.number(),
   namaMenu: z.string(),
-//   statusKetersediaan: z.enum(["TERSEDIA", "HABIS", "TERBATAS"]),
-  statusKetersediaan:z.string(),
+  //   statusKetersediaan: z.enum(["TERSEDIA", "HABIS", "TERBATAS"]),
+  statusKetersediaan: z.string(),
   sisaPorsi: z.number(),
 });
 
@@ -80,7 +80,11 @@ export type InventarisItem = z.infer<typeof schema>;
 
 // ── Status Badge ─────────────────────────────────────────────────────────────
 
-function StatusBadge({ status }: { status: InventarisItem["statusKetersediaan"] }) {
+function StatusBadge({
+  status,
+}: {
+  status: InventarisItem["statusKetersediaan"];
+}) {
   const map: Record<
     InventarisItem["statusKetersediaan"],
     { label: string; className: string }
@@ -168,7 +172,6 @@ export const columns: ColumnDef<InventarisItem>[] = [
       <StatusBadge status={row.getValue("statusKetersediaan")} />
     ),
   },
- 
 ];
 
 // ── Drag Handle ──────────────────────────────────────────────────────────────
@@ -226,8 +229,9 @@ export default function TabelInventaris({
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] =
-    React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -286,7 +290,7 @@ export default function TabelInventaris({
 
   return (
     <>
-      <div className="overflow-hidden rounded-lg border border-border">
+      <div className="overflow-hidden rounded-[8px] border border-border">
         <DndContext
           collisionDetection={closestCenter}
           modifiers={[restrictToVerticalAxis]}

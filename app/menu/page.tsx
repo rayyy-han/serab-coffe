@@ -275,15 +275,15 @@ export default function MenuPage() {
               return (
                 <div
                   key={item.id}
-                  className="bg-card border border-border rounded-xl p-5 flex flex-col gap-3 hover:shadow-md hover:border-primary/30 transition-all duration-200"
+                  className="bg-card border border-border rounded-[32px] p-5 flex flex-col gap-3 hover:shadow-md hover:border-primary/30 transition-all duration-200"
                 >
                   {/* Image / Icon area */}
-                  <div className="w-full h-28 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+                  <div className="w-full h-28 rounded-[8px] bg-muted flex items-center justify-center overflow-hidden">
                     {item.image_url ? (
                       <img
                         src={item.image_url}
                         alt={item.title}
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-cover rounded-[8px]"
                       />
                     ) : (
                       <Icon

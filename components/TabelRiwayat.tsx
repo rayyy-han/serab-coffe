@@ -60,15 +60,15 @@ import z from "zod";
 import { columns, DraggableRow, schema } from "./data-table";
 
 export default function TabelRiwayat() {
-  const [data, setData]       = useState<z.infer<typeof schema>[]>([]);
+  const [data, setData] = useState<z.infer<typeof schema>[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [rowSelection, setRowSelection]       = useState({});
+  const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters]     = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting]                 = useState<SortingState>([]);
-  const [pagination, setPagination]           = useState({ pageIndex: 0, pageSize: 10 });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
 
   const sortableId = React.useId();
   const sensors = useSensors(
@@ -82,7 +82,7 @@ export default function TabelRiwayat() {
     setLoading(true);
     setError(null);
     try {
-      const res  = await fetch("/api/history");
+      const res = await fetch("/api/history");
       const json = await res.json();
 
       if (!res.ok || !json.success) {
@@ -97,7 +97,7 @@ export default function TabelRiwayat() {
           return result.success ? result.data : null;
         })
         .filter(Boolean) as z.infer<typeof schema>[];
-        console.log(json.data)
+      console.log(json.data);
       setData(parsed);
     } catch {
       setError("Terjadi kesalahan saat mengambil data");
@@ -137,18 +137,18 @@ export default function TabelRiwayat() {
       columnFilters,
       pagination,
     },
-    getRowId              : (row) => row.id.toString(),
-    enableRowSelection    : true,
-    onRowSelectionChange  : setRowSelection,
-    onSortingChange       : setSorting,
-    onColumnFiltersChange : setColumnFilters,
+    getRowId: (row) => row.id.toString(),
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange    : setPagination,
-    getCoreRowModel       : getCoreRowModel(),
-    getFilteredRowModel   : getFilteredRowModel(),
-    getPaginationRowModel : getPaginationRowModel(),
-    getSortedRowModel     : getSortedRowModel(),
-    getFacetedRowModel    : getFacetedRowModel(),
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
@@ -167,7 +167,9 @@ export default function TabelRiwayat() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
         <p className="text-destructive text-sm">{error}</p>
-        <Button variant="outline" onClick={fetchHistory}>Coba Lagi</Button>
+        <Button variant="outline" onClick={fetchHistory}>
+          Coba Lagi
+        </Button>
       </div>
     );
   }
@@ -175,7 +177,7 @@ export default function TabelRiwayat() {
   // ── Render: Tabel ───────────────────────────────────────────────
   return (
     <>
-      <div className="overflow-hidden rounded-lg border">
+      <div className="overflow-hidden rounded-[8px] border">
         <DndContext
           collisionDetection={closestCenter}
           modifiers={[restrictToVerticalAxis]}
@@ -241,7 +243,9 @@ export default function TabelRiwayat() {
               onValueChange={(value) => table.setPageSize(Number(value))}
             >
               <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
               </SelectTrigger>
               <SelectContent side="top">
                 <SelectGroup>

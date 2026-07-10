@@ -165,7 +165,7 @@ function ImageDropzone({
 
   if (preview) {
     return (
-      <div className="relative w-full h-48 rounded-lg overflow-hidden border border-border">
+      <div className="relative w-full h-48 rounded-[8px] overflow-hidden border border-border">
         <img
           src={preview}
           alt="Preview"
@@ -186,7 +186,7 @@ function ImageDropzone({
     <div
       {...getRootProps()}
       className={cn(
-        "w-full h-48 rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors",
+        "w-full h-48 rounded-[8px] border-2 border-dashed flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors",
         isDragActive
           ? "border-primary bg-primary/5"
           : "border-border hover:border-primary/50 hover:bg-muted/50",
