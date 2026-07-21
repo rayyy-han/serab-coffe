@@ -55,15 +55,18 @@ import {
 } from "./ui/select";
 import { Button } from "./ui/button";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import z from "zod";
 import { columns, DraggableRow, schema } from "./data-table";
 
-export default function TabelRiwayat() {
-  const [data, setData] = useState<z.infer<typeof schema>[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// ── Props: data & loading opsional. Kalau data null/undefined, ────
+// komponen ini fetch data default sendiri (/api/history)
+type TabelRiwayatProps = {
+  data?: unknown[] | null;
+  loading?: boolean;
+};
 
+export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }: TabelRiwayatProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -77,38 +80,60 @@ export default function TabelRiwayat() {
     useSensor(KeyboardSensor, {}),
   );
 
-  // ── Fetch data dari API ─────────────────────────────────────────
-  const fetchHistory = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // ── Data default: dipakai kalau props "data" tidak dikirim (null/undefined) ─
+  const usingDefaultData = rawDataProp === null || rawDataProp === undefined;
+
+  const [defaultData, setDefaultData] = useState<unknown[]>([]);
+  const [defaultLoading, setDefaultLoading] = useState(true);
+  const [defaultError, setDefaultError] = useState<string | null>(null);
+
+  const fetchDefaultHistory = useCallback(async () => {
+    setDefaultLoading(true);
+    setDefaultError(null);
     try {
       const res = await fetch("/api/history");
       const json = await res.json();
 
       if (!res.ok || !json.success) {
-        setError(json.message || "Gagal mengambil data history");
+        setDefaultError(json.message || "Gagal mengambil data history");
         return;
       }
 
-      // Validasi data dengan schema zod
-      const parsed = json.data
-        .map((item: unknown) => {
-          const result = schema.safeParse(item);
-          return result.success ? result.data : null;
-        })
-        .filter(Boolean) as z.infer<typeof schema>[];
-      console.log(json.data);
-      setData(parsed);
+      setDefaultData(json.data);
     } catch {
-      setError("Terjadi kesalahan saat mengambil data");
+      setDefaultError("Terjadi kesalahan saat mengambil data");
     } finally {
-      setLoading(false);
+      setDefaultLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchHistory();
-  }, [fetchHistory]);
+    if (usingDefaultData) {
+      fetchDefaultHistory();
+    }
+  }, [usingDefaultData, fetchDefaultHistory]);
+
+  // ── Sumber data & loading efektif: props kalau ada, default kalau tidak ─
+  const effectiveRawData = usingDefaultData ? defaultData : (rawDataProp as unknown[]);
+  const effectiveLoading = usingDefaultData ? defaultLoading : !!loadingProp;
+  const effectiveError = usingDefaultData ? defaultError : null;
+
+  // ── Validasi data dengan schema zod ───────────────────────────────
+  const [data, setData] = useState<z.infer<typeof schema>[]>([]);
+
+  const parsedData = useMemo(() => {
+    return effectiveRawData
+      .map((item: unknown) => {
+        const result = schema.safeParse(item);
+        return result.success ? result.data : null;
+      })
+      .filter(Boolean) as z.infer<typeof schema>[];
+  }, [effectiveRawData]);
+
+  // ── Sinkronkan hasil parse ke state lokal (agar drag & drop tetap bisa reorder) ─
+  useEffect(() => {
+    setData(parsedData);
+  }, [parsedData]);
 
   // ── Drag & drop ─────────────────────────────────────────────────
   const dataIds = React.useMemo<UniqueIdentifier[]>(
@@ -153,7 +178,7 @@ export default function TabelRiwayat() {
   });
 
   // ── Render: Loading ─────────────────────────────────────────────
-  if (loading) {
+  if (effectiveLoading) {
     return (
       <div className="flex items-center justify-center py-20 gap-2 text-muted-foreground">
         <Loader2 className="w-5 h-5 animate-spin" />
@@ -162,12 +187,12 @@ export default function TabelRiwayat() {
     );
   }
 
-  // ── Render: Error ───────────────────────────────────────────────
-  if (error) {
+  // ── Render: Error (hanya berlaku untuk fetch data default) ──────
+  if (effectiveError) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
-        <p className="text-destructive text-sm">{error}</p>
-        <Button variant="outline" onClick={fetchHistory}>
+        <p className="text-destructive text-sm">{effectiveError}</p>
+        <Button variant="outline" onClick={fetchDefaultHistory}>
           Coba Lagi
         </Button>
       </div>

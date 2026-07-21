@@ -48,10 +48,10 @@ interface StatisticResponse {
 
 // ── Palet warna donut (4 slot: 3 menu teratas + "Lainnya") ──────────────────
 const DONUT_COLORS = [
-  "oklch(0.52 0.13 152)",
-  "oklch(0.62 0.10 152)",
-  "oklch(0.72 0.09 152)",
-  "oklch(0.82 0.06 152)",
+  "red",
+  "#2596be",
+  "#24bfb2",
+  "#d1f022",
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
