@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
       image_url,
       stock,
       categori,
-      variant: variant ?? 'none',
       price,
+      is_active: true,
     };
 
     const { data, error } = await supabase
@@ -168,11 +168,11 @@ export async function PUT(request: NextRequest) {
       .from('menu')
       .select('id')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (findError || !existingMenu) {
       return NextResponse.json(
-        { success: false, message: 'Menu tidak ditemukan' },
+        { success: false, message: 'Menu tidak ditemukan', error: findError?.message },
         { status: 404 }
       );
     }
@@ -217,7 +217,6 @@ export async function PUT(request: NextRequest) {
     if (image_url   !== undefined) updatedFields.image_url   = image_url;
     if (stock       !== undefined) updatedFields.stock       = stock;
     if (categori    !== undefined) updatedFields.categori    = categori;
-    if (variant     !== undefined) updatedFields.variant     = variant;
     if (price       !== undefined) updatedFields.price       = price;
 
     if (Object.keys(updatedFields).length === 0) {

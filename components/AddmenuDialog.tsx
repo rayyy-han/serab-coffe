@@ -340,15 +340,16 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
       const json = await res.json();
 
       if (!res.ok || !json.success) {
-        alert(json.message || "Gagal menambahkan menu");
+        const errMsg = json.error ? `${json.message}: ${json.error}` : (json.message || "Gagal menambahkan menu");
+        alert(errMsg);
         return;
       }
 
       setOpen(false);
       resetForm();
       onSuccess?.();
-    } catch (err) {
-      alert("Terjadi kesalahan saat menambahkan menu");
+    } catch (err: any) {
+      alert(`Terjadi kesalahan saat menambahkan menu: ${err?.message || err}`);
     } finally {
       setLoading(false);
     }

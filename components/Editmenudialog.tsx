@@ -389,15 +389,16 @@ export default function EditMenuDialog({
       const json = await res.json();
 
       if (!res.ok || !json.success) {
-        alert(json.message || "Gagal mengupdate menu");
+        const errMsg = json.error ? `${json.message}: ${json.error}` : (json.message || "Gagal mengupdate menu");
+        alert(errMsg);
         return;
       }
 
       setIsOpen(false);
       resetForm();
       onSuccess?.();
-    } catch (err) {
-      alert("Terjadi kesalahan saat mengupdate menu");
+    } catch (err: any) {
+      alert(`Terjadi kesalahan saat mengupdate menu: ${err?.message || err}`);
     } finally {
       setLoading(false);
     }
