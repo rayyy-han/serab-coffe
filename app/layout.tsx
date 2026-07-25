@@ -5,6 +5,11 @@ import Providers from "@/components/Providers";
 export const metadata: Metadata = {
   title: "Serab Coffee - Management System",
   description: "Aplikasi POS & Manajemen Serab Coffee",
+  icons: {
+    icon: "/serab-logo.svg",
+    shortcut: "/serab-logo.svg",
+    apple: "/serab-logo.svg",
+  },
 };
 
 export default function RootLayout({

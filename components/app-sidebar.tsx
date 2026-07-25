@@ -16,18 +16,11 @@ import {
   LayoutDashboardIcon,
   ListIcon,
   ChartBarIcon,
-  FolderIcon,
-  UsersIcon,
+  FileChartColumnIcon,
   CameraIcon,
   FileTextIcon,
-  Settings2Icon,
-  CircleHelpIcon,
-  SearchIcon,
-  DatabaseIcon,
-  FileChartColumnIcon,
-  FileIcon,
-  Coffee,
 } from "lucide-react";
+import { SerabLogoIcon } from "@/components/serab-logo";
 
 const data = {
   user: {
@@ -119,11 +112,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="bg-sidebar-accent/70 data-[slot=sidebar-menu-button]:p-1.5!"
+              className="data-[slot=sidebar-menu-button]:p-2! hover:bg-sidebar-accent/60 transition-colors"
             >
-              <a href="#">
-                <Coffee className="size-5! text-sidebar-primary" />
-                <span className="text-base font-semibold">Serab Coffee</span>
+              <a href="#" className="flex items-center gap-2.5">
+                <SerabLogoIcon height={28} onDark={true} />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-sm font-extrabold tracking-wider text-[#F5E6D3]">SERAB COFFEE</span>
+                  <span className="text-[10px] text-[#F5E6D3]/75 font-serif italic tracking-wide">feel the deLIGHT</span>
+                </div>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

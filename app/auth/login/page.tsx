@@ -5,6 +5,7 @@ import {
   Eye, EyeOff, Coffee, Loader2, Leaf,
   KeyRound, CheckCircle2, X, ShieldCheck,
 } from "lucide-react";
+import { SerabLogo, SerabLogoIcon } from "@/components/serab-logo";
 
 // ── Forgot Password Modal ──────────────────────────────────────────
 function ForgotPasswordModal({ onClose }: { onClose: () => void }) {
@@ -440,35 +441,19 @@ export default function LoginPage() {
 
           <div className="px-8 pt-8 pb-9">
             {/* Brand */}
-            <div className="flex flex-col items-center mb-7">
-              <div
-                className="relative flex items-center justify-center w-16 h-16 mb-4 shadow-md"
-                style={{
-                  background: "linear-gradient(135deg, oklch(0.42 0.085 55), oklch(0.35 0.07 52))",
-                  borderRadius: "20px",
-                  boxShadow: "0 4px 16px oklch(0.42 0.085 55 / 35%)",
-                }}
-              >
-                <Leaf className="w-8 h-8 text-white" strokeWidth={2} />
-                <div
-                  className="absolute inset-0"
-                  style={{ border: "1px solid oklch(0.72 0.09 75 / 40%)", borderRadius: "20px" }}
-                />
+            <div className="flex flex-col items-center mb-5">
+              {/* Logo PNG — let it display at natural ratio, no extra frame */}
+              <div className="mb-3">
+                <SerabLogoIcon height={90} />
               </div>
 
-              <p
-                className="text-xs font-semibold tracking-[0.2em] uppercase mb-1"
-                style={{ color: "oklch(0.52 0.085 60)" }}
-              >
-                Serab Coffee
-              </p>
               <h1
-                className="text-2xl font-bold tracking-tight"
+                className="text-xl font-bold tracking-tight"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)", color: "oklch(0.25 0.045 60)" }}
               >
                 Selamat Datang Kembali
               </h1>
-              <p className="mt-1.5 text-sm text-center" style={{ color: "oklch(0.48 0.045 60)" }}>
+              <p className="mt-1 text-sm text-center" style={{ color: "oklch(0.48 0.045 60)" }}>
                 Masuk untuk mengelola kasir kamu
               </p>
             </div>
