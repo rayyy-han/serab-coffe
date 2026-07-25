@@ -48,12 +48,14 @@ interface Menu {
   image_url: string;
   stock: StockStatus;
   categori: KategoriMenu;
+  variant?: string;
   price: number;
 }
 
 interface FormData {
   title: string;
   categori: string;
+  variant: string;
   description: string;
   stock: string;
   price: string;
@@ -63,6 +65,7 @@ interface FormData {
 interface FormErrors {
   title?: string;
   categori?: string;
+  variant?: string;
   stock?: string;
   price?: string;
   image_url?: string;
@@ -72,6 +75,13 @@ interface FormErrors {
 const kategoriOptions = [
   { label: "Makanan", value: "makanan" },
   { label: "Minuman", value: "minuman" },
+];
+
+const variantOptions = [
+  { label: "Ice (Es / Dingin)", value: "ice" },
+  { label: "Hot (Panas)", value: "hot" },
+  { label: "Ice & Hot (Bisa Dingin / Panas)", value: "both" },
+  { label: "Tidak Ada Varian", value: "none" },
 ];
 
 const stockOptions = [
@@ -229,13 +239,21 @@ function ImageDropzone({
 interface EditMenuDialogProps {
   menu: Menu;
   onSuccess?: () => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
+  triggerClassName?: string;
 }
 
 export default function EditMenuDialog({
   menu,
   onSuccess,
+  open,
+  onOpenChange,
+  showTrigger = true,
+  triggerClassName,
 }: EditMenuDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -244,6 +262,7 @@ export default function EditMenuDialog({
   const [form, setForm] = useState<FormData>({
     title: "",
     categori: "",
+    variant: "none",
     description: "",
     stock: "",
     price: "",
@@ -251,11 +270,15 @@ export default function EditMenuDialog({
   });
 
   // ── Isi form dengan data menu yang ada saat dialog dibuka ───────
+  const isOpen = open ?? uncontrolledOpen;
+  const setIsOpen = onOpenChange ?? setUncontrolledOpen;
+
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       setForm({
         title: menu.title,
         categori: menu.categori,
+        variant: menu.variant ?? "none",
         description: menu.description ?? "",
         stock: menu.stock,
         price: String(menu.price),
@@ -265,7 +288,7 @@ export default function EditMenuDialog({
       setImageFile(null);
       setErrors({});
     }
-  }, [open, menu]);
+  }, [isOpen, menu]);
 
   // ── Handlers ───────────────────────────────────────────────────
   const handleChange = (field: keyof FormData, value: string) => {
@@ -278,7 +301,9 @@ export default function EditMenuDialog({
   const handleImageDrop = (file: File) => {
     setImageFile(file);
     setPreview(URL.createObjectURL(file));
-    setErrors((prev) => ({ ...prev, image_url: undefined }));
+    if (errors.image_url) {
+      setErrors((prev) => ({ ...prev, image_url: undefined }));
+    }
   };
 
   const handleImageRemove = () => {
@@ -290,6 +315,7 @@ export default function EditMenuDialog({
     setForm({
       title: "",
       categori: "",
+      variant: "none",
       description: "",
       stock: "",
       price: "",
@@ -354,6 +380,7 @@ export default function EditMenuDialog({
           image_url: imageUrl,
           stock: form.stock,
           categori: form.categori,
+          variant: form.variant || "none",
           price: Number(form.price),
           description: form.description.trim() || null,
         }),
@@ -366,7 +393,7 @@ export default function EditMenuDialog({
         return;
       }
 
-      setOpen(false);
+      setIsOpen(false);
       resetForm();
       onSuccess?.();
     } catch (err) {
@@ -379,22 +406,28 @@ export default function EditMenuDialog({
   // ── Render ─────────────────────────────────────────────────────
   return (
     <Dialog
-      open={open}
+      open={isOpen}
       onOpenChange={(val) => {
-        setOpen(val);
+        setIsOpen(val);
         if (!val) resetForm();
       }}
     >
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex-1 gap-1.5 border-border text-foreground hover:bg-muted"
-        >
-          <Edit className="w-3.5 h-3.5" />
-          Edit
-        </Button>
-      </DialogTrigger>
+      {showTrigger && (
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            style={{ borderRadius: "12px" }}
+            className={cn(
+              "flex-1 gap-1.5 rounded-[12px] border-border bg-card hover:bg-amber-500/10 text-foreground font-semibold transition-all duration-200 shadow-xs py-2 px-4",
+              triggerClassName
+            )}
+          >
+            <Edit className="w-3.5 h-3.5 text-primary" />
+            Edit
+          </Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -434,6 +467,20 @@ export default function EditMenuDialog({
             {errors.categori && (
               <p className="text-xs text-destructive">{errors.categori}</p>
             )}
+          </div>
+
+          {/* Varian Suhu (Ice / Hot) */}
+          <div className="space-y-1.5">
+            <Label>
+              Varian Suhu (Ice / Hot) <span className="text-muted-foreground text-xs">(opsional)</span>
+            </Label>
+            <Combobox
+              value={form.variant}
+              onChange={(val) => handleChange("variant", val)}
+              options={variantOptions}
+              placeholder="Pilih varian suhu"
+              error={errors.variant}
+            />
           </div>
 
           {/* Deskripsi */}
@@ -515,7 +562,7 @@ export default function EditMenuDialog({
           <Button
             variant="outline"
             onClick={() => {
-              setOpen(false);
+              setIsOpen(false);
               resetForm();
             }}
             disabled={loading}

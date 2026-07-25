@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body: CreateMenuDTO = await request.json();
 
     // ── Validasi field wajib ──────────────────────────────────────
-    const { title, image_url, stock, categori, price, description } = body;
+    const { title, image_url, stock, categori, variant, price, description } = body;
 
     if (!title || !image_url || !stock || !categori || !price) {
       return NextResponse.json(
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
       image_url,
       stock,
       categori,
+      variant: variant ?? 'none',
       price,
     };
 
@@ -177,7 +178,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body: Partial<CreateMenuDTO> = await request.json();
-    const { title, image_url, stock, categori, price, description } = body;
+    const { title, image_url, stock, categori, variant, price, description } = body;
 
     // Validasi enum stock jika dikirim
     if (stock !== undefined) {
@@ -216,6 +217,7 @@ export async function PUT(request: NextRequest) {
     if (image_url   !== undefined) updatedFields.image_url   = image_url;
     if (stock       !== undefined) updatedFields.stock       = stock;
     if (categori    !== undefined) updatedFields.categori    = categori;
+    if (variant     !== undefined) updatedFields.variant     = variant;
     if (price       !== undefined) updatedFields.price       = price;
 
     if (Object.keys(updatedFields).length === 0) {

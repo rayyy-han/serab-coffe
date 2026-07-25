@@ -23,30 +23,27 @@ export async function GET() {
     }
 
     // ── Kalkulasi KPI ─────────────────────────────────────────────
-    let totalPesanan    = 0;
-    let totalPendapatan = 0;
-    let totalPembelian  = 0;
+    let totalPesanan     = 0;
+    let totalPendapatan  = 0;
+    let totalItemTerjual = 0;
 
     for (const item of data) {
-  const menu  = Array.isArray(item.menu) ? item.menu[0] : item.menu;
-  const price = (menu as { price: number } | null)?.price ?? 0;
-  const total = price * item.quantity;
+      const menu  = Array.isArray(item.menu) ? item.menu[0] : item.menu;
+      const price = (menu as { price: number } | null)?.price ?? 0;
+      const qty   = item.quantity ?? 0;
+      const total = price * qty;
 
-  totalPesanan += 1;
-
-  if (item.history_type === "penjualan") {
-    totalPendapatan += total;
-  } else if (item.history_type === "pembelian") {
-    totalPembelian += total;
-  }
-}
+      totalPesanan += 1;
+      totalItemTerjual += qty;
+      totalPendapatan += total;
+    }
     return NextResponse.json(
       {
         success: true,
         data: {
-          total_pesanan   : totalPesanan,
-          total_pendapatan: totalPendapatan,
-          total_pembelian : totalPembelian,
+          total_pesanan    : totalPesanan,
+          total_pendapatan : totalPendapatan,
+          total_item_terjual: totalItemTerjual,
         },
       },
       { status: 200 }

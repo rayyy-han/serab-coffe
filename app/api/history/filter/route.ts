@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
         id_menu,
         history_type,
         quantity,
+        created_at,
         menu!inner (
           id,
           title,
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
         )
       `)
       .ilike("menu.title", `%${title}%`)
-      .order("id", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (history_type) {
       query = query.eq("history_type", history_type);

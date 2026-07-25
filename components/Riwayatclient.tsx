@@ -13,6 +13,7 @@ type HistoryItem = {
   id_menu: string;
   history_type: "pembelian" | "penjualan";
   quantity: number;
+  created_at?: string;
   menu: {
     id: string;
     title: string;
@@ -100,7 +101,7 @@ export default function RiwayatClient() {
 
       {/* Table */}
       <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
-        <TabelRiwayat data={data} loading={loading} />
+        <TabelRiwayat data={data} loading={loading} onDataChange={handleSearch} />
       </div>
 
     </div>

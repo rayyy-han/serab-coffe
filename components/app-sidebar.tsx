@@ -26,7 +26,7 @@ import {
   DatabaseIcon,
   FileChartColumnIcon,
   FileIcon,
-  CommandIcon,
+  Coffee,
 } from "lucide-react";
 
 const data = {
@@ -119,10 +119,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="bg-sidebar-accent/70 data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <a href="#">
-                <CommandIcon className="size-5!" />
+                <Coffee className="size-5! text-sidebar-primary" />
                 <span className="text-base font-semibold">Serab Coffee</span>
               </a>
             </SidebarMenuButton>

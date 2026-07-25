@@ -16,16 +16,18 @@ export async function GET(request: NextRequest) {
         id_menu,
         history_type,
         quantity,
+        created_at,
         menu (
           id,
           title,
+          description,
           price,
           image_url,
           categori,
           stock
         )
       `)
-      .order("id", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (history_type) {
       const validTypes = ["pembelian", "penjualan"];
@@ -161,6 +163,53 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { success: false, message: "Internal server error" },
       { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "ID transaksi wajib diisi" },
+        { status: 400 },
+      );
+    }
+
+    const { data, error } = await supabase
+      .from("history")
+      .delete()
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { success: false, message: "Gagal menghapus data transaksi", error: error.message },
+        { status: 500 },
+      );
+    }
+
+    if (!data) {
+      return NextResponse.json(
+        { success: false, message: "Data transaksi tidak ditemukan" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: "Data transaksi berhasil dihapus" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Server error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 },
     );
   }
 }

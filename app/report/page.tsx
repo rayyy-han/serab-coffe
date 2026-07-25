@@ -48,10 +48,10 @@ interface StatisticResponse {
 
 // ── Palet warna donut (4 slot: 3 menu teratas + "Lainnya") ──────────────────
 const DONUT_COLORS = [
-  "red",
-  "#2596be",
-  "#24bfb2",
-  "#d1f022",
+  "#8a4b28",
+  "#c9823b",
+  "#5f7653",
+  "#d8b675",
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -387,29 +387,29 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-6">
         {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-start justify-between gap-4 border-b border-border/70 pb-5 sm:items-center">
           <div>
             <h1 className="text-2xl font-bold text-foreground">
               Laporan Bulanan
             </h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            <p className="mt-1 text-sm text-muted-foreground">
               Rekap performa {data.periode}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Button
               variant="outline"
-              className="flex items-center gap-2 bg-card border-border text-foreground"
+              className="flex items-center gap-2 border-border bg-card/90 text-foreground shadow-sm backdrop-blur-sm"
             >
               <CalendarDays className="w-4 h-4" />
               {data.periode}
             </Button>
             <Button
               onClick={handleExport}
-              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="flex items-center gap-2 bg-primary px-4 text-primary-foreground shadow-sm hover:bg-primary/90"
             >
               <Download className="w-4 h-4" />
               Export
@@ -418,30 +418,30 @@ export default function ReportPage() {
         </div>
 
         {/* ── KPI Cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {kpiCards.map((kpi) => (
-            <Card key={kpi.label} className="bg-card border-border">
-              <CardContent className="p-4 space-y-1">
-                <p className="text-2xl font-bold text-foreground leading-tight">
+            <Card key={kpi.label} className="border border-white/60 bg-card/92 shadow-[0_8px_24px_oklch(0.25_0.045_60_/_10%)] backdrop-blur-sm">
+              <CardContent className="space-y-1.5 p-4 sm:p-5">
+                <p className="text-2xl font-bold leading-tight text-foreground sm:text-3xl">
                   {kpi.value}
                 </p>
-                <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                <p className="text-xs font-medium text-muted-foreground">{kpi.label}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* ── Bottom Section: Donut + Ringkasan ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-6">
           {/* Komposisi Menu Terlaris */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
+          <Card className="border border-white/60 bg-card/92 shadow-[0_10px_30px_oklch(0.25_0.045_60_/_10%)] backdrop-blur-sm">
+            <CardHeader className="border-b border-border/60 pb-4">
               <CardTitle className="flex items-center gap-2 text-sm font-semibold text-foreground">
                 <PieChart className="w-4 h-4 text-primary" />
                 Komposisi Menu Terlaris
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center pb-4">
+            <CardContent className="flex flex-col items-center pb-5 pt-4">
               <ChartContainer
                 config={chartConfig}
                 className="mx-auto aspect-square max-h-[240px] w-full"
@@ -466,9 +466,9 @@ export default function ReportPage() {
                     data={menuData}
                     dataKey="value"
                     nameKey="name"
-                    innerRadius={55}
-                    outerRadius={85}
-                    strokeWidth={2}
+                    innerRadius={58}
+                    outerRadius={88}
+                    strokeWidth={3}
                     stroke="var(--card)"
                   >
                     {menuData.map((entry, index) => (
@@ -489,20 +489,20 @@ export default function ReportPage() {
           </Card>
 
           {/* Ringkasan Bulanan */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
+          <Card className="border border-white/60 bg-card/92 shadow-[0_10px_30px_oklch(0.25_0.045_60_/_10%)] backdrop-blur-sm">
+            <CardHeader className="border-b border-border/60 pb-4">
               <CardTitle className="flex items-center gap-2 text-sm font-semibold text-foreground">
                 <ClipboardList className="w-4 h-4 text-primary" />
                 Ringkasan Bulanan
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-0 divide-y divide-border">
+            <CardContent className="divide-y divide-border/70">
               {ringkasan.map((item) => (
                 <div
                   key={item.label}
-                  className="flex items-center justify-between py-3"
+                  className="flex items-center justify-between gap-4 py-4"
                 >
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-sm font-medium text-muted-foreground">
                     {item.label}
                   </span>
                   <span className="text-sm font-semibold text-foreground text-right">

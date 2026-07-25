@@ -41,6 +41,7 @@ import { cn } from "@/src/utils/cn";
 interface FormData {
   title: string;
   categori: string;
+  variant: string;
   description: string;
   stock: string;
   price: string;
@@ -50,6 +51,7 @@ interface FormData {
 interface FormErrors {
   title?: string;
   categori?: string;
+  variant?: string;
   stock?: string;
   price?: string;
   image_url?: string;
@@ -59,6 +61,13 @@ interface FormErrors {
 const kategoriOptions = [
   { label: "Makanan", value: "makanan" },
   { label: "Minuman", value: "minuman" },
+];
+
+const variantOptions = [
+  { label: "Ice (Es / Dingin)", value: "ice" },
+  { label: "Hot (Panas)", value: "hot" },
+  { label: "Ice & Hot (Bisa Dingin / Panas)", value: "both" },
+  { label: "Tidak Ada Varian", value: "none" },
 ];
 
 const stockOptions = [
@@ -227,6 +236,7 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
   const [form, setForm] = useState<FormData>({
     title: "",
     categori: "",
+    variant: "none",
     description: "",
     stock: "",
     price: "",
@@ -256,6 +266,7 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
     setForm({
       title: "",
       categori: "",
+      variant: "none",
       description: "",
       stock: "",
       price: "",
@@ -320,6 +331,7 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
           image_url: imageUrl,
           stock: form.stock,
           categori: form.categori,
+          variant: form.variant || "none",
           price: Number(form.price),
           description: form.description.trim() || null,
         }),
@@ -352,7 +364,10 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="gap-2 ml-auto bg-primary hover:bg-primary/90 text-primary-foreground">
+        <Button
+          className="gap-2 ml-auto bg-primary hover:bg-primary/90 text-primary-foreground rounded-[12px] px-5 shadow-xs transition-all"
+          style={{ borderRadius: "12px" }}
+        >
           <Plus className="w-4 h-4" />
           Tambah Menu
         </Button>
@@ -396,6 +411,20 @@ export default function AddMenuDialog({ onSuccess }: AddMenuDialogProps) {
             {errors.categori && (
               <p className="text-xs text-destructive">{errors.categori}</p>
             )}
+          </div>
+
+          {/* Varian Suhu (Ice / Hot) */}
+          <div className="space-y-1.5">
+            <Label>
+              Varian Suhu (Ice / Hot) <span className="text-muted-foreground text-xs">(opsional)</span>
+            </Label>
+            <Combobox
+              value={form.variant}
+              onChange={(val) => handleChange("variant", val)}
+              options={variantOptions}
+              placeholder="Pilih varian suhu"
+              error={errors.variant}
+            />
           </div>
 
           {/* Deskripsi */}

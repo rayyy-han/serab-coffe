@@ -48,6 +48,7 @@ interface Menu {
   image_url: string;
   stock: StockStatus;
   categori: KategoriMenu;
+  variant?: string;
   price: number;
 }
 
@@ -92,6 +93,33 @@ function StockBadge({ stock }: { stock: StockStatus }) {
       className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${className}`}
     >
       {label}
+    </span>
+  );
+}
+
+function VariantBadge({ variant }: { variant?: string }) {
+  if (!variant || variant === "none") return null;
+  const config: Record<string, { label: string; className: string }> = {
+    ice: {
+      label: "🧊 Ice",
+      className: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    },
+    hot: {
+      label: "☕ Hot",
+      className: "bg-orange-100 text-orange-700 border-orange-200",
+    },
+    both: {
+      label: "🧊☕ Ice / Hot",
+      className: "bg-purple-100 text-purple-700 border-purple-200",
+    },
+  };
+  const item = config[variant];
+  if (!item) return null;
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${item.className}`}
+    >
+      {item.label}
     </span>
   );
 }
@@ -179,12 +207,13 @@ export default function MenuPage() {
         <div className="flex flex-wrap items-center gap-3">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px] max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Cari menu..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 bg-card border-border"
+              style={{ borderRadius: "12px" }}
+              className="pl-9 bg-card border-border rounded-[12px] shadow-xs focus:ring-primary/20"
             />
           </div>
 
@@ -193,13 +222,14 @@ export default function MenuPage() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="gap-2 border-border bg-card text-foreground"
+                style={{ borderRadius: "12px" }}
+                className="gap-2 border-border bg-card text-foreground rounded-[12px] shadow-xs hover:bg-accent/50 px-4"
               >
-                <SlidersHorizontal className="w-4 h-4" />
+                <SlidersHorizontal className="w-4 h-4 text-primary" />
                 {categoryLabel[activeCategory] ?? activeCategory}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="start" className="rounded-[12px]">
               {categories.map((cat) => (
                 <DropdownMenuItem
                   key={cat}
@@ -219,13 +249,14 @@ export default function MenuPage() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="gap-2 border-border bg-card text-foreground"
+                style={{ borderRadius: "12px" }}
+                className="gap-2 border-border bg-card text-foreground rounded-[12px] shadow-xs hover:bg-accent/50 px-4"
               >
-                <ArrowUpDown className="w-4 h-4" />
+                <ArrowUpDown className="w-4 h-4 text-primary" />
                 Urutkan
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="start" className="rounded-[12px]">
               {sortOptions.map((opt) => (
                 <DropdownMenuItem
                   key={opt}
@@ -245,7 +276,7 @@ export default function MenuPage() {
         {/* State: Loading */}
         {loading && (
           <div className="flex items-center justify-center py-20 gap-2 text-muted-foreground">
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className="w-5 h-5 animate-spin text-primary" />
             <span>Memuat data menu...</span>
           </div>
         )}
@@ -253,8 +284,8 @@ export default function MenuPage() {
         {/* State: Error */}
         {!loading && error && (
           <div className="text-center py-20 space-y-3">
-            <p className="text-destructive">{error}</p>
-            <Button variant="outline" onClick={fetchMenus}>
+            <p className="text-destructive font-medium">{error}</p>
+            <Button variant="outline" style={{ borderRadius: "12px" }} className="rounded-[12px] px-5" onClick={fetchMenus}>
               Coba Lagi
             </Button>
           </div>
@@ -262,100 +293,123 @@ export default function MenuPage() {
 
         {/* State: Empty */}
         {!loading && !error && sorted.length === 0 && (
-          <div className="text-center py-20 text-muted-foreground">
+          <div className="text-center py-20 text-muted-foreground bg-card/50 rounded-[18px] border border-dashed border-border p-8">
             Tidak ada menu yang ditemukan.
           </div>
         )}
 
         {/* Grid Menu */}
         {!loading && !error && sorted.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {sorted.map((item) => {
               const Icon = getIconByKategori(item.categori);
               return (
                 <div
                   key={item.id}
-                  className="bg-card border border-border rounded-[32px] p-5 flex flex-col gap-3 hover:shadow-md hover:border-primary/30 transition-all duration-200"
+                  style={{ borderRadius: "18px" }}
+                  className="group bg-card/90 backdrop-blur-md border border-border/70 p-5 flex flex-col justify-between gap-4 shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
-                  {/* Image / Icon area */}
-                  <div className="w-full h-28 rounded-[8px] bg-muted flex items-center justify-center overflow-hidden">
-                    {item.image_url ? (
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full h-full object-cover rounded-[8px]"
+                  <div className="space-y-3.5">
+                    {/* Image / Icon area */}
+                    <div
+                      style={{ borderRadius: "12px" }}
+                      className="w-full h-44 bg-muted/60 flex items-center justify-center overflow-hidden relative shadow-inner"
+                    >
+                      {item.image_url ? (
+                        <img
+                          src={item.image_url}
+                          alt={item.title}
+                          style={{ borderRadius: "12px" }}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <Icon
+                          className="w-12 h-12 text-muted-foreground/60"
+                          strokeWidth={1.5}
+                        />
+                      )}
+
+                      {/* Overlay Category Tag */}
+                      <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-[8px] uppercase tracking-wider border border-white/20">
+                        {item.categori}
+                      </div>
+                    </div>
+
+                    {/* Header Info */}
+                    <div>
+                      <h3 className="font-bold text-foreground text-lg tracking-tight group-hover:text-primary transition-colors line-clamp-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs mt-1 line-clamp-2 min-h-[2rem] leading-relaxed">
+                        {item.description || "Tidak ada deskripsi"}
+                      </p>
+                    </div>
+
+                    {/* Stok & Varian */}
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      <span className="text-xs font-medium text-muted-foreground">Stok:</span>
+                      <StockBadge stock={item.stock} />
+                      <VariantBadge variant={item.variant} />
+                    </div>
+                  </div>
+
+                  {/* Footer: Harga & Action Buttons */}
+                  <div className="space-y-3 pt-2 border-t border-border/40">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-xs text-muted-foreground font-medium">Harga</span>
+                      <p className="text-primary font-extrabold text-xl tracking-tight">
+                        {formatRupiah(item.price)}
+                      </p>
+                    </div>
+
+                    {/* Actions: Edit & Hapus Buttons (Tumpul Membulat / 12px Radius Selaras) */}
+                    <div className="flex items-center gap-2.5">
+                      <EditMenuDialog
+                        menu={item}
+                        triggerClassName="h-10 rounded-[12px] font-semibold border-border/80 hover:border-primary/50 hover:bg-primary/10 text-foreground transition-all duration-200 px-4"
                       />
-                    ) : (
-                      <Icon
-                        className="w-10 h-10 text-muted-foreground"
-                        strokeWidth={1.5}
-                      />
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-foreground text-base">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm capitalize">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Stok */}
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="text-muted-foreground">Stok:</span>
-                    <StockBadge stock={item.stock} />
-                  </div>
-
-                  {/* Harga */}
-                  <p className="text-primary font-bold text-lg">
-                    {formatRupiah(item.price)}
-                  </p>
-
-                  {/* Actions */}
-                  <div className="flex gap-2 pt-1">
-                    <EditMenuDialog menu={item} />
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          disabled={deletingId === item.id}
-                          className="flex-1 gap-1.5 bg-destructive hover:bg-destructive/90 text-white"
-                        >
-                          {deletingId === item.id ? (
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          ) : (
-                            <Trash className="w-3.5 h-3.5" />
-                          )}
-                          {deletingId === item.id ? "Menghapus..." : "Hapus"}
-                        </Button>
-                      </AlertDialogTrigger>
-
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Hapus menu ini?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Menu{" "}
-                            <span className="font-medium text-foreground">
-                              {item.title}
-                            </span>{" "}
-                            akan dihapus secara permanen dan tidak dapat
-                            dikembalikan.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Batal</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(item.id)}
-                            className="bg-destructive hover:bg-destructive/90 text-white"
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            disabled={deletingId === item.id}
+                            style={{ borderRadius: "12px" }}
+                            className="flex-1 h-10 rounded-[12px] gap-1.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white font-semibold border border-red-500/20 hover:border-red-500 transition-all duration-200 shadow-none hover:shadow-md px-4"
                           >
-                            Ya, hapus
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                            {deletingId === item.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Trash className="w-4 h-4" />
+                            )}
+                            {deletingId === item.id ? "Menghapus..." : "Hapus"}
+                          </Button>
+                        </AlertDialogTrigger>
+
+                        <AlertDialogContent className="rounded-[16px]">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Hapus menu ini?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Menu{" "}
+                              <span className="font-medium text-foreground">
+                                {item.title}
+                              </span>{" "}
+                              akan dihapus secara permanen dan tidak dapat
+                              dikembalikan.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel style={{ borderRadius: "9999px" }} className="rounded-full">Batal</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(item.id)}
+                              style={{ borderRadius: "9999px" }}
+                              className="rounded-full bg-destructive hover:bg-destructive/90 text-white"
+                            >
+                              Ya, hapus
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
                 </div>
               );

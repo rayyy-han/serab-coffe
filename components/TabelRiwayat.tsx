@@ -54,6 +54,16 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import z from "zod";
@@ -64,9 +74,14 @@ import { columns, DraggableRow, schema } from "./data-table";
 type TabelRiwayatProps = {
   data?: unknown[] | null;
   loading?: boolean;
+  onDataChange?: () => void | Promise<void>;
 };
 
-export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }: TabelRiwayatProps) {
+export default function TabelRiwayat({
+  data: rawDataProp,
+  loading: loadingProp,
+  onDataChange,
+}: TabelRiwayatProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -86,6 +101,11 @@ export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }
   const [defaultData, setDefaultData] = useState<unknown[]>([]);
   const [defaultLoading, setDefaultLoading] = useState(true);
   const [defaultError, setDefaultError] = useState<string | null>(null);
+  const [historyToDelete, setHistoryToDelete] = useState<{
+    id: string;
+    menuTitle: string;
+  } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchDefaultHistory = useCallback(async () => {
     setDefaultLoading(true);
@@ -118,6 +138,38 @@ export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }
   const effectiveLoading = usingDefaultData ? defaultLoading : !!loadingProp;
   const effectiveError = usingDefaultData ? defaultError : null;
 
+  const refreshHistory = async () => {
+    if (onDataChange) {
+      await onDataChange();
+      return;
+    }
+    await fetchDefaultHistory();
+  };
+
+  const handleDeleteHistory = async () => {
+    if (!historyToDelete) return;
+
+    setDeleting(true);
+    try {
+      const response = await fetch(`/api/history?id=${historyToDelete.id}`, {
+        method: "DELETE",
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        alert(result.message || "Gagal menghapus data transaksi");
+        return;
+      }
+
+      setHistoryToDelete(null);
+      await refreshHistory();
+    } catch {
+      alert("Terjadi kesalahan saat menghapus data transaksi");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   // ── Validasi data dengan schema zod ───────────────────────────────
   const [data, setData] = useState<z.infer<typeof schema>[]>([]);
 
@@ -130,10 +182,32 @@ export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }
       .filter(Boolean) as z.infer<typeof schema>[];
   }, [effectiveRawData]);
 
-  // ── Sinkronkan hasil parse ke state lokal (agar drag & drop tetap bisa reorder) ─
-  useEffect(() => {
-    setData(parsedData);
+  // ── Grouping: gabungkan transaksi dengan menu yang sama ───────────
+  // Transaksi yang memiliki id_menu & history_type yang sama akan dijumlahkan quantity-nya
+  const groupedData = useMemo(() => {
+    const map = new Map<string, z.infer<typeof schema>>();
+
+    for (const item of parsedData) {
+      // key: id_menu + history_type agar penjualan & pembelian tetap terpisah
+      const key = `${item.id_menu}__${item.history_type}`;
+      if (map.has(key)) {
+        const existing = map.get(key)!;
+        map.set(key, {
+          ...existing,
+          quantity: existing.quantity + item.quantity,
+        });
+      } else {
+        map.set(key, { ...item });
+      }
+    }
+
+    return Array.from(map.values());
   }, [parsedData]);
+
+  // ── Sinkronkan hasil grouped ke state lokal ────────────────────────
+  useEffect(() => {
+    setData(groupedData);
+  }, [groupedData]);
 
   // ── Drag & drop ─────────────────────────────────────────────────
   const dataIds = React.useMemo<UniqueIdentifier[]>(
@@ -175,6 +249,9 @@ export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    meta: {
+      onDeleteHistory: (id: string, menuTitle: string) => setHistoryToDelete({ id, menuTitle }),
+    },
   });
 
   // ── Render: Loading ─────────────────────────────────────────────
@@ -251,6 +328,31 @@ export default function TabelRiwayat({ data: rawDataProp, loading: loadingProp }
           </Table>
         </DndContext>
       </div>
+
+      <AlertDialog
+        open={Boolean(historyToDelete)}
+        onOpenChange={(open) => !open && !deleting && setHistoryToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus data transaksi ini?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Data riwayat untuk <span className="font-medium text-foreground">{historyToDelete?.menuTitle}</span>{" "}
+              akan dihapus permanen dari tabel transaksi.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleting}
+              onClick={handleDeleteHistory}
+              className="bg-destructive text-white hover:bg-destructive/90"
+            >
+              {deleting ? "Menghapus..." : "Hapus permanen"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Pagination */}
       <div className="flex items-center justify-between px-4">

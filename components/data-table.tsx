@@ -62,7 +62,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -103,12 +102,14 @@ import {
 export const schema = z.object({
   id: z.string(), // id history
   id_menu: z.string(), // id menu
-  history_type: z.enum(["pembelian", "penjualan"]), // tipe transaksi
+  history_type: z.string(), // tipe transaksi
   quantity: z.number(), // jumlah porsi
+  created_at: z.string().optional().nullable(), // tanggal dibuat
   menu: z
     .object({
       id: z.string(),
       title: z.string(),
+      description: z.string().nullable().optional(),
       price: z.number(),
       image_url: z.string(),
       categori: z.string(),
@@ -122,17 +123,36 @@ function formatRupiah(num: number) {
   return "Rp " + num.toLocaleString("id-ID");
 }
 
-function HistoryTypeBadge({ type }: { type: "pembelian" | "penjualan" }) {
-  const config = {
-    pembelian: "bg-blue-100 text-blue-700 border-blue-200",
-    penjualan: "bg-green-100 text-green-700 border-green-200",
-  };
+function formatDate(dateStr?: string | null) {
+  if (!dateStr) return "-";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "-";
+    return d.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "-";
+  }
+}
+
+function HistoryTypeBadge({ type }: { type: string }) {
+  const isPenjualan = type === "penjualan" || !type;
+  const badgeClass = isPenjualan
+    ? "bg-green-100 text-green-700 border-green-200"
+    : "bg-blue-100 text-blue-700 border-blue-200";
+  const label = isPenjualan ? "Penjualan" : type;
+
   return (
     <Badge
       variant="outline"
-      className={`px-2 py-0.5 text-xs font-medium capitalize border ${config[type]}`}
+      className={`px-2 py-0.5 text-xs font-medium capitalize border ${badgeClass}`}
     >
-      {type}
+      {label}
     </Badge>
   );
 }
@@ -191,22 +211,35 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
     enableHiding: false,
   },
 
-  // ── Id Transaksi ─────────────────────────────────────────────────
+  // ── Id Transaksi (Dipersingkat) ───────────────────────────────────
   {
     accessorKey: "id",
     header: "Id Transaksi",
     cell: ({ row }) => {
-      console.log(row.original.id);
+      const fullId = row.original.id;
+      const shortId = fullId.length > 8 ? `#${fullId.slice(0, 8)}` : `#${fullId}`;
       return (
         <Badge
           variant="outline"
-          className="px-1.5 text-muted-foreground font-mono text-xs"
+          title={fullId}
+          className="px-2 py-0.5 text-muted-foreground font-mono text-xs border-border/80 bg-muted/30 hover:bg-muted transition-colors cursor-help"
         >
-          {row.original.id}
+          {shortId}
         </Badge>
       );
     },
     enableHiding: false,
+  },
+
+  // ── Tanggal Transaksi ─────────────────────────────────────────────
+  {
+    accessorKey: "created_at",
+    header: "Tanggal",
+    cell: ({ row }) => (
+      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">
+        {formatDate(row.original.created_at)}
+      </span>
+    ),
   },
 
   // ── Nama Menu ────────────────────────────────────────────────────
@@ -288,7 +321,15 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   // ── Actions ──────────────────────────────────────────────────────
   {
     id: "actions",
-    cell: ({ row }) => (
+    cell: ({ row, table }) => {
+      const menu = row.original.menu;
+      const actions = table.options.meta as
+        | {
+            onDeleteHistory?: (id: string, menuTitle: string) => void;
+          }
+        | undefined;
+
+      return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -301,12 +342,16 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Hapus</DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={() => actions?.onDeleteHistory?.(row.original.id, menu?.title ?? "menu terkait")}
+          >
+            Hapus data transaksi
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    ),
+      );
+    },
   },
 ];
 

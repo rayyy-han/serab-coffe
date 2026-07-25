@@ -53,7 +53,6 @@ interface FormErrors {
 
 // ── Options ───────────────────────────────────────────────────────
 const historyTypeOptions = [
-  { label: "Pembelian", value: "pembelian" },
   { label: "Penjualan", value: "penjualan" },
 ];
 
@@ -206,7 +205,7 @@ export default function AddTransactionDialog({ onSuccess }: AddTransactionDialog
 
   const [form, setForm] = useState<FormData>({
     menu_id          : "",
-    history_type     : "",
+    history_type     : "penjualan",
     quantity         : "",
     price_per_portion: "0",
   });
@@ -253,7 +252,7 @@ export default function AddTransactionDialog({ onSuccess }: AddTransactionDialog
   };
 
   const resetForm = () => {
-    setForm({ menu_id: "", history_type: "", quantity: "", price_per_portion: "0" });
+    setForm({ menu_id: "", history_type: "penjualan", quantity: "", price_per_portion: "0" });
     setErrors({});
   };
 

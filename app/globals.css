@@ -49,39 +49,39 @@
 :root {
   /* Beige warm background */
   --background: oklch(0.96 0.018 80);
-  --foreground: oklch(0.22 0.03 100);
+  --foreground: oklch(0.25 0.045 60);
  
   /* Card: sedikit lebih terang dari background */
-  --card: oklch(0.99 0.01 80);
-  --card-foreground: oklch(0.22 0.03 100);
+  --card: oklch(0.985 0.014 80 / 94%);
+  --card-foreground: oklch(0.25 0.045 60);
  
-  --popover: oklch(0.99 0.01 80);
-  --popover-foreground: oklch(0.22 0.03 100);
+  --popover: oklch(0.985 0.014 80 / 96%);
+  --popover-foreground: oklch(0.25 0.045 60);
  
   /* Primary: Hijau Tua */
-  --primary: oklch(0.35 0.09 152);
+  --primary: oklch(0.42 0.085 55);
   --primary-foreground: oklch(0.99 0 0);
  
   /* Secondary: Hijau Medium */
-  --secondary: oklch(0.45 0.11 152);
-  --secondary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.72 0.09 75);
+  --secondary-foreground: oklch(0.25 0.045 60);
  
   /* Muted: Beige sedikit lebih gelap */
-  --muted: oklch(0.91 0.022 80);
-  --muted-foreground: oklch(0.46 0.02 100);
+  --muted: oklch(0.91 0.03 75 / 92%);
+  --muted-foreground: oklch(0.42 0.045 60);
  
   /* Accent: Sage / Hijau Muda */
-  --accent: oklch(0.72 0.09 152);
-  --accent-foreground: oklch(0.18 0.04 152);
+  --accent: oklch(0.82 0.06 78);
+  --accent-foreground: oklch(0.25 0.045 60);
  
   --destructive: oklch(0.628 0.213 22.216);
  
   /* Border & Input: Beige gelap */
-  --border: oklch(0.86 0.025 80);
-  --input: oklch(0.86 0.025 80);
+  --border: oklch(0.72 0.045 65 / 75%);
+  --input: oklch(0.72 0.045 65 / 75%);
  
   /* Ring: Hijau Tua */
-  --ring: oklch(0.35 0.09 152);
+  --ring: oklch(0.52 0.09 55);
  
   /* Chart colors */
   --chart-1: oklch(0.35 0.09 152);   /* Hijau tua #1A4731 */
@@ -93,14 +93,14 @@
   --radius: 0.625rem;
  
   /* Sidebar: Hijau Tua Gelap */
-  --sidebar: oklch(0.25 0.07 152);
-  --sidebar-foreground: oklch(0.97 0.01 80);
-  --sidebar-primary: oklch(0.52 0.13 152);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.32 0.09 152);
-  --sidebar-accent-foreground: oklch(0.97 0.01 80);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.52 0.13 152);
+  --sidebar: oklch(0.24 0.045 58);
+  --sidebar-foreground: oklch(0.96 0.02 80);
+  --sidebar-primary: oklch(0.72 0.1 72);
+  --sidebar-primary-foreground: oklch(0.22 0.04 60);
+  --sidebar-accent: oklch(0.34 0.06 58);
+  --sidebar-accent-foreground: oklch(0.98 0.015 80);
+  --sidebar-border: oklch(0.72 0.05 65 / 28%);
+  --sidebar-ring: oklch(0.72 0.1 72);
 }
  
 .dark {
@@ -153,3 +153,50 @@
   --sidebar-ring: oklch(0.52 0.13 152);
 }
 
+html {
+  background-color: oklch(0.22 0.03 100);
+}
+
+body {
+  background-image: url("/coffee-beans-wallpaper.avif");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+[data-slot="sidebar-inner"] {
+  background-image: linear-gradient(
+    180deg,
+    oklch(0.27 0.05 58),
+    oklch(0.20 0.04 55)
+  );
+  border-right: 1px solid oklch(0.72 0.05 65 / 28%);
+}
+
+[data-slot="sidebar-inset"] > header {
+  background-color: oklch(0.985 0.014 80 / 72%);
+  border-color: oklch(0.72 0.045 65 / 65%);
+  backdrop-filter: blur(10px);
+}
+
+[data-slot="table-container"] {
+  background-color: oklch(0.985 0.014 80 / 88%);
+  backdrop-filter: blur(8px);
+}
+
+[data-slot="sidebar-inset"],
+.min-h-screen.bg-background {
+  background-image:
+    linear-gradient(oklch(0.96 0.018 80 / 52%), oklch(0.96 0.018 80 / 52%)),
+    url("/coffee-beans-wallpaper.avif");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.dark [data-slot="sidebar-inset"],
+.dark .min-h-screen.bg-background {
+  background-image:
+    linear-gradient(oklch(0.16 0.03 152 / 58%), oklch(0.16 0.03 152 / 58%)),
+    url("/coffee-beans-wallpaper.avif");
+}
