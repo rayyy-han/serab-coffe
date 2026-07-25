@@ -105,7 +105,7 @@ export function ChartAreaInteractive() {
   const periodLabel = timeRange === "7d" ? "7 hari" : timeRange === "30d" ? "30 hari" : "3 bulan";
 
   return (
-    <Card className="@container/card">
+    <Card className="@container/card shine-card transition-all duration-300 hover:shadow-xl border-border/80">
       <CardHeader>
         <CardTitle>Grafik Penjualan</CardTitle>
         <CardDescription>

@@ -304,7 +304,7 @@ export default function TabelRiwayat({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody className="**:data-[slot=table-cell]:first:w-8">
+            <TableBody className="**:data-[slot=table-cell]:first:w-8 animate-stagger">
               {table.getRowModel().rows?.length ? (
                 <SortableContext
                   items={dataIds}

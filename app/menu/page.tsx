@@ -300,14 +300,14 @@ export default function MenuPage() {
 
         {/* Grid Menu */}
         {!loading && !error && sorted.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-stagger">
             {sorted.map((item) => {
               const Icon = getIconByKategori(item.categori);
               return (
                 <div
                   key={item.id}
                   style={{ borderRadius: "18px" }}
-                  className="group bg-card/90 backdrop-blur-md border border-border/70 p-5 flex flex-col justify-between gap-4 shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                  className="shine-card group bg-card/90 backdrop-blur-md border border-border/70 p-5 flex flex-col justify-between gap-4 shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
                   <div className="space-y-3.5">
                     {/* Image / Icon area */}

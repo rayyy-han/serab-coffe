@@ -39,36 +39,36 @@ export default function RiwayatKpiCards() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 animate-stagger">
       {/* Total Pesanan */}
-      <div className="bg-card border border-border rounded-[12px] p-5 space-y-2">
+      <div className="shine-card kpi-float bg-card border border-border rounded-[12px] p-5 space-y-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <Receipt className="w-4 h-4" />
           Total Pesanan
         </div>
-        <p className="text-3xl font-bold text-foreground">
+        <p className="text-3xl font-bold text-foreground animate-value-pop">
           {loading ? "—" : summary.total_pesanan}
         </p>
       </div>
 
       {/* Total Pendapatan */}
-      <div className="bg-card border border-border rounded-[12px] p-5 space-y-2">
+      <div className="shine-card kpi-float bg-card border border-border rounded-[12px] p-5 space-y-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <TrendingUp className="w-4 h-4" />
           Total Pendapatan
         </div>
-        <p className="text-3xl font-bold text-foreground">
+        <p className="text-3xl font-bold text-foreground animate-value-pop">
           {loading ? "—" : formatRupiah(summary.total_pendapatan)}
         </p>
       </div>
 
       {/* Total Item Terjual */}
-      <div className="bg-card border border-border rounded-[12px] p-5 space-y-2">
+      <div className="shine-card kpi-float bg-card border border-border rounded-[12px] p-5 space-y-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <ShoppingBag className="w-4 h-4" />
           Total Item Terjual
         </div>
-        <p className="text-3xl font-bold text-foreground">
+        <p className="text-3xl font-bold text-foreground animate-value-pop">
           {loading ? "—" : `${summary.total_item_terjual} porsi`}
         </p>
       </div>

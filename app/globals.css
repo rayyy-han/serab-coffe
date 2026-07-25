@@ -200,3 +200,169 @@ body {
     linear-gradient(oklch(0.16 0.03 152 / 58%), oklch(0.16 0.03 152 / 58%)),
     url("/coffee-beans-wallpaper.avif");
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   PAGE TRANSITION ANIMATIONS
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ─────────────────────────────────────────────────── */
+@keyframes page-slide-up-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+    filter: blur(4px);
+  }
+  60% {
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes card-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes shine-sweep {
+  0% { transform: translateX(-110%) skewX(-12deg); }
+  100% { transform: translateX(200%) skewX(-12deg); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 oklch(0.52 0.13 152 / 35%); }
+  70%  { box-shadow: 0 0 0 8px oklch(0.52 0.13 152 / 0%); }
+  100% { box-shadow: 0 0 0 0 oklch(0.52 0.13 152 / 0%); }
+}
+
+@keyframes value-pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  70%  { transform: scale(1.06); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float-bob-shadow {
+  0%, 100% { box-shadow: 0 4px 16px oklch(0.42 0.085 55 / 10%); }
+  50%       { box-shadow: 0 12px 32px oklch(0.42 0.085 55 / 20%); }
+}
+
+@keyframes header-slide-down {
+  0%   { opacity: 0; transform: translateY(-12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page Transition ─────────────────────────────────────────────── */
+.page-enter {
+  animation: page-slide-up-fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.page-idle {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Stagger card / item reveals ─────────────────────────────────── */
+.animate-stagger > * {
+  animation: card-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-stagger > *:nth-child(1)   { animation-delay: 0.05s; }
+.animate-stagger > *:nth-child(2)   { animation-delay: 0.12s; }
+.animate-stagger > *:nth-child(3)   { animation-delay: 0.19s; }
+.animate-stagger > *:nth-child(4)   { animation-delay: 0.26s; }
+.animate-stagger > *:nth-child(5)   { animation-delay: 0.31s; }
+.animate-stagger > *:nth-child(6)   { animation-delay: 0.36s; }
+.animate-stagger > *:nth-child(7)   { animation-delay: 0.40s; }
+.animate-stagger > *:nth-child(8)   { animation-delay: 0.44s; }
+.animate-stagger > *:nth-child(n+9) { animation-delay: 0.47s; }
+
+/* ── KPI Card — pulsing shadow float ────────────────────────────── */
+.kpi-float {
+  animation: float-bob-shadow 4s ease-in-out infinite;
+}
+.kpi-float:nth-child(2) { animation-delay: 0.8s; }
+.kpi-float:nth-child(3) { animation-delay: 1.6s; }
+.kpi-float:nth-child(4) { animation-delay: 2.4s; }
+
+/* ── Value Pop ─────────────────────────────────────────────────── */
+.animate-value-pop {
+  animation: value-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+/* ── Shine sweep on hover ─────────────────────────────────────────── */
+.shine-card {
+  position: relative;
+  overflow: hidden;
+}
+.shine-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    oklch(1 0 0 / 14%) 50%,
+    transparent 62%
+  );
+  transform: translateX(-110%) skewX(-12deg);
+  pointer-events: none;
+}
+.shine-card:hover::after {
+  animation: shine-sweep 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Sidebar nav active pulse ─────────────────────────────────────── */
+[data-slot="sidebar-menu-button"][data-active="true"] {
+  animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Sidebar nav hover micro-slide ──────────────────────────────── */
+[data-slot="sidebar-menu-button"] {
+  transition: background-color 0.2s ease,
+              transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.2s ease;
+}
+[data-slot="sidebar-menu-button"]:hover {
+  transform: translateX(4px);
+}
+
+/* ── Table row hover lift ─────────────────────────────────────────── */
+[data-slot="table-body"] tr {
+  transition: background-color 0.15s ease,
+              transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.18s ease;
+}
+[data-slot="table-body"] tr:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px oklch(0.42 0.085 55 / 10%);
+}
+
+/* ── Button press ─────────────────────────────────────────────────── */
+button:not([disabled]):active {
+  transform: scale(0.96);
+  transition: transform 0.08s ease;
+}
+
+/* ── Dialog / Modal fade-in ──────────────────────────────────────── */
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"] {
+  animation: page-slide-up-fade-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Recharts chart fade in ──────────────────────────────────────── */
+.recharts-wrapper {
+  animation: card-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+/* ── Page h1 slide down ──────────────────────────────────────────── */
+h1 {
+  animation: header-slide-down 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}

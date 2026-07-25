@@ -4,6 +4,7 @@ import { AppSidebar } from "./app-sidebar";
 import { SiteHeader } from "./site-header";
 import { SidebarInset, SidebarProvider } from "./ui/sidebar";
 import { TooltipProvider } from "./ui/tooltip";
+import PageTransition from "./PageTransition";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -15,7 +16,11 @@ export default function Providers(props: ProvidersProps) {
   if (
    pathname.includes("/auth")
   ) {
-    return children;
+    return (
+      <PageTransition>
+        {children}
+      </PageTransition>
+    );
   }
   return (
     <TooltipProvider>
@@ -30,7 +35,9 @@ export default function Providers(props: ProvidersProps) {
         <AppSidebar variant="inset" />
         <SidebarInset>
           <SiteHeader />
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </SidebarInset>
       </SidebarProvider>
     </TooltipProvider>

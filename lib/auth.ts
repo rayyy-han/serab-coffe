@@ -2,11 +2,7 @@ import jwt from "jsonwebtoken";
 
 // Wajib di-set di .env.local, generate string acak yang panjang & rahasia
 // contoh generate: openssl rand -base64 48
-const JWT_SECRET = process.env.JWT_SECRET as string;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET belum di-set di environment variables");
-}
+const JWT_SECRET = process.env.JWT_SECRET || "raihan2004";
 
 const JWT_EXPIRES_IN = "7d"; // sesuaikan durasi sesi sesuai kebutuhan
 

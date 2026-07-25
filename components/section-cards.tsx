@@ -43,42 +43,42 @@ export async function SectionCards() {
   const summary = await getDashboardSummary();
 
   return (
-    <div className="grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 dark:*:data-[slot=card]:bg-card">
+    <div className="grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 dark:*:data-[slot=card]:bg-card animate-stagger">
 
       {/* Total Pesanan Hari Ini */}
-      <Card className="@container/card">
+      <Card className="@container/card shine-card kpi-float transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <ShoppingCart className="w-4 h-4" />
             Total Pesanan Hari Ini
           </CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl animate-value-pop">
             {formatRupiah(summary.total_pesanan_hari_ini)}
           </CardTitle>
         </CardHeader>
       </Card>
 
       {/* Total Pembeli Hari Ini */}
-      <Card className="@container/card">
+      <Card className="@container/card shine-card kpi-float transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <Users className="w-4 h-4" />
             Total Pembeli Hari Ini
           </CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl animate-value-pop">
             {summary.total_pembeli_hari_ini.toLocaleString("id-ID")}
           </CardTitle>
         </CardHeader>
       </Card>
 
       {/* Menu Tersedia */}
-      <Card className="@container/card">
+      <Card className="@container/card shine-card kpi-float transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <UtensilsCrossed className="w-4 h-4" />
             Menu Tersedia
           </CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl animate-value-pop">
             {summary.menu_tersedia} menu
           </CardTitle>
         </CardHeader>

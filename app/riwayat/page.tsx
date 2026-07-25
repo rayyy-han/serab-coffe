@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default function RiwayatPage() {
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6 animate-stagger">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-foreground">
