@@ -112,13 +112,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-2! hover:bg-sidebar-accent/60 transition-colors"
+              size="lg"
+              className="hover:bg-sidebar-accent/60 transition-colors"
             >
               <a href="#" className="flex items-center gap-2.5">
                 <SerabLogoIcon height={28} onDark={true} />
                 <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-extrabold tracking-wider text-[#F5E6D3]">SERAB COFFEE</span>
-                  <span className="text-[10px] text-[#F5E6D3]/75 font-serif italic tracking-wide">feel the deLIGHT</span>
+                  <span className="text-sm font-bold tracking-wider text-[#F5E6D3]">SERAB COFFEE</span>
+                  <span className="text-[10px] font-medium italic tracking-wide text-[#F5E6D3]/80">feel the deLIGHT</span>
                 </div>
               </a>
             </SidebarMenuButton>

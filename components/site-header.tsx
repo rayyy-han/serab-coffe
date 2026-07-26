@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { SerabLogoIcon } from "@/components/serab-logo";
 import { LayoutDashboard, Utensils, History, FileSpreadsheet, Store } from "lucide-react";
 
 /**
@@ -62,8 +61,8 @@ export function SiteHeader() {
             className="mx-1.5 data-[orientation=vertical]:h-4 bg-border/60"
           />
           
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-emerald-900/10 border border-emerald-900/15 hidden sm:flex items-center justify-center">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-emerald-900/10 border border-emerald-900/20 shadow-xs hidden sm:flex items-center justify-center transition-all hover:scale-105">
               {pageInfo.icon}
             </div>
             <div className="flex flex-col justify-center">
@@ -74,19 +73,6 @@ export function SiteHeader() {
                 {pageInfo.subtitle}
               </span>
             </div>
-          </div>
-        </div>
-
-        {/* Right Section: Brand Emblem Badge */}
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#254B20]/10 border border-[#254B20]/20 shadow-xs">
-          <SerabLogoIcon height={22} />
-          <div className="flex flex-col text-left leading-none hidden sm:flex">
-            <span className="text-[11px] font-extrabold tracking-wider uppercase text-[#254B20]">
-              Serab Coffee
-            </span>
-            <span className="text-[9px] font-serif italic text-[#254B20]/75 tracking-wide">
-              Brewery
-            </span>
           </div>
         </div>
       </div>

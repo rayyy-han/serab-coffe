@@ -41,28 +41,11 @@ export function SerabLogoIcon({
         height: height,
         objectFit: "contain",
         display: "block",
+        mixBlendMode: onDark ? "multiply" : "normal",
       }}
       priority
     />
   );
-
-  if (onDark) {
-    // Wrap in a small cream pill so the white-background PNG stays visible
-    return (
-      <div
-        className={`shrink-0 rounded-lg overflow-hidden ${className}`}
-        style={{
-          background: "#F4EDE0",
-          padding: "3px 6px",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {img}
-      </div>
-    );
-  }
 
   return (
     <div
